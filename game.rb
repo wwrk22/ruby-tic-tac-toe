@@ -16,9 +16,18 @@ class Game
   def start
     loop do
       winner = play_turn(@p1)
-      return winner if winner
+      
+      if winner
+        @p1.add_one_to_score
+        return @p1.name
+      end
+      
       winner = play_turn(@p2)
-      return winner if winner
+      
+      if winner
+        @p2.add_one_to_score
+        return @p2.name
+      end
     end
   end
 

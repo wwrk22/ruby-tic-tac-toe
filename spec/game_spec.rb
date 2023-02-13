@@ -132,8 +132,12 @@ RSpec.describe Game do
   # Script method
   describe '#start' do
     context "when the next turn ends the game" do
+      let(:p1) { instance_double(Player, name: 'Foo') }
+
       before do
         allow(game).to receive(:play_turn).and_return('X')
+        allow(p1).to receive(:add_one_to_score)
+        game.instance_variable_set(:@p1, p1)
       end
 
       it "plays one turn" do
@@ -143,8 +147,12 @@ RSpec.describe Game do
     end
 
     context "when the next two turns end the game" do
+      let(:p2) { instance_double(Player, name: 'Foo') }
+
       before do
         allow(game).to receive(:play_turn).and_return(nil, 'X')
+        allow(p2).to receive(:add_one_to_score)
+        game.instance_variable_set(:@p2, p2)
       end
 
       it "plays two turns" do
