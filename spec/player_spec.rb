@@ -82,6 +82,32 @@ RSpec.describe Player do
 
   end
 
+
+  describe "#add_one_to_score" do
+    subject(:player) { described_class.new('Foo', 'O') }
+
+    context "when score is the initial value of zero" do
+      it "returns one" do
+        player.add_one_to_score
+        expect(player.score).to eq(1)
+      end
+    end
+  end
+
+  
+  describe "#reset_score" do
+    subject(:player) { described_class.new('Foo', 'O') }
+
+    context "when score is one" do
+      it "returns zero" do
+        player.instance_variable_set(:@score, 1)
+        player.reset_score
+        expect(player.score).to eq(0)
+      end
+    end
+  end
+
+
   # Reset outputs correctly
   after :all do
     $stdout = @stdout
