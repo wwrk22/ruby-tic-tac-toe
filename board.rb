@@ -14,14 +14,23 @@ class Board
 
   ##
   # Set the marker at the index in the board array.
-  def mark(index)
-    # TO-DO
+  def mark(index, marker)
+    if index < 0 || 8 < index
+      return false
+    end
+
+    if @game_board[index] == nil
+      @game_board[index] = marker
+      return true
+    end
+    
+    return false
   end
 
   ##
   # Return true if the board is full. Otherwise, return false.
   def full?
-    # TO-DO
+    return @game_board.all? { |slot| slot != nil }
   end
 
   ##

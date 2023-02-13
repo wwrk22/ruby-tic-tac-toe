@@ -1,23 +1,77 @@
-# frozen_string_literal: true
-
 require_relative '../board.rb'
 
 RSpec.describe Board do
 
   # Suppress print and puts messages
-  before :all do
-    @stdout = $stdout
-    @stderr = $stderr
-    $stdout = File.open(File::NULL, 'w')
-    $stderr = File.open(File::NULL, 'w')
-  end
+  # before :all do
+  #   @stdout = $stdout
+  #   @stderr = $stderr
+  #   $stdout = File.open(File::NULL, 'w')
+  #   $stderr = File.open(File::NULL, 'w')
+  # end
 
   describe '#mark' do
-    # TO-DO
+    subject(:board) { described_class.new }
+    let(:game_board) {
+      board = Array.new(9)
+      board[0] = 'X'
+    }
+
+    before do
+      board.instance_variable_set(:@game_board, game_board)
+    end
+
+    context "when the board index is valid" do
+      context "when the index is occupied" do
+        it "returns false" do
+          expect(board.mark(0, 'X')).to eq(false)
+        end
+      end
+
+      context "when the index is open" do
+        it "returns true" do
+          expect(board.mark(1, 'X')).to eq(true)
+        end
+      end
+    end
+
+    context "when the board index is invalid" do
+      it "return false" do
+        expect(board.mark(9, 'X')).to eq(false)
+      end
+    end
   end
 
   describe '#full?' do
-    # TO-DO
+    subject(:board) { described_class.new }
+
+    context "when the board is full" do
+      let(:full_board) { Array.new(9, 'O') }
+
+      before do
+        board.instance_variable_set(:@game_board, full_board)
+      end
+
+      it "returns true" do
+        expect(board.full?).to eq(true)
+      end
+    end
+
+    context "when the board is not full" do
+      let(:not_full_board) {
+        board = Array.new(9)
+        board[0] = 'O'
+        board
+      }
+
+      before do
+        board.instance_variable_set(:@game_board, not_full_board)
+      end
+
+      it "returns false" do
+        expect(board.full?).to eq(false)
+      end
+    end
   end
 
   describe '#clear_board' do
@@ -216,11 +270,11 @@ RSpec.describe Board do
 
 
   # Reset outputs correctly
-  after :all do
-    $stdout = @stdout
-    $stderr = @stderr
-    @stdout = nil
-    @stderr = nil
-  end
+  # after :all do
+  #   $stdout = @stdout
+  #   $stderr = @stderr
+  #   @stdout = nil
+  #   @stderr = nil
+  # end
 
 end
