@@ -13,6 +13,11 @@ class Board
     puts "Cleared board."
   end
 
+  ##
+  # Set the marker at the index in the board array.
+  def mark(index)
+
+  end
 
   ##
   # Return the board in current state in string format.
