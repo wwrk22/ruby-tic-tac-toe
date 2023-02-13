@@ -10,13 +10,18 @@ class Board
   # Clear the board by resetting all 9 slots of @game_board to nil.
   def clear_board
     @game_board.clear
-    puts "Cleared board."
   end
 
   ##
   # Set the marker at the index in the board array.
   def mark(index)
+    # TO-DO
+  end
 
+  ##
+  # Return true if the board is full. Otherwise, return false.
+  def full?
+    # TO-DO
   end
 
   ##

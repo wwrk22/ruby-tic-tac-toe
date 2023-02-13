@@ -53,6 +53,11 @@ RSpec.describe Game do
     end
   end
 
+  # ------------------------------------------------------------------------
+  # TO-DO: change the method to return 'X', 'O', or nil to indicate game winner
+  # or that the game is not over yet.
+  # ------------------------------------------------------------------------
+  
   # Script method that calls:
   #   Board#check_rows
   #   Board#check_columns

@@ -12,6 +12,14 @@ RSpec.describe Board do
     $stderr = File.open(File::NULL, 'w')
   end
 
+  describe '#mark' do
+    # TO-DO
+  end
+
+  describe '#full?' do
+    # TO-DO
+  end
+
   describe '#clear_board' do
     let(:game_board) { instance_double(Array) }
     subject(:board) { described_class.new }
