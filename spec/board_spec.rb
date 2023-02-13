@@ -74,22 +74,6 @@ RSpec.describe Board do
     end
   end
 
-  describe '#clear_board' do
-    let(:game_board) { instance_double(Array) }
-    subject(:board) { described_class.new }
-
-    before do
-      allow(Array).to receive(:new).and_return(game_board)
-      allow(game_board).to receive(:clear)
-    end
-
-    it "sends #clear to @board" do
-      expect(game_board).to receive(:clear)
-      board.clear_board
-    end
-  end
-
-
   describe '#get_board' do
     context "when the board is empty" do
       subject(:empty_board) { described_class.new }

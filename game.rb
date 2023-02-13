@@ -32,6 +32,12 @@ class Game
   end
 
   ##
+  # Replace board with new one.
+  def reset_board
+    @board = Board.new
+  end
+
+  ##
   # Display the current score.
   def display_score
     puts "Score\n#{@p1.name}: #{@p1.score}\n#{@p2.name}: #{@p2.score}"

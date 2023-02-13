@@ -7,12 +7,6 @@ class Board
   end
 
   ##
-  # Clear the board by resetting all 9 slots of @game_board to nil.
-  def clear_board
-    @game_board.clear
-  end
-
-  ##
   # Set the marker at the index in the board array.
   def mark(index, marker)
     if index < 0 || 8 < index
