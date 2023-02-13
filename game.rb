@@ -10,6 +10,19 @@ class Game
   end
 
   ##
+  # Start a new game and run until there is a winner.
+  # At the end of the game, return the winner if there is one or nil if the
+  # game ends in a tie.
+  def start
+    loop do
+      winner = play_turn(@p1)
+      return winner if winner
+      winner = play_turn(@p2)
+      return winner if winner
+    end
+  end
+
+  ##
   # Display the current score.
   def display_score
     puts "Score\n#{@p1.name}: #{@p1.score}\n#{@p2.name}: #{@p2.score}"
@@ -23,15 +36,20 @@ class Game
   end
 
   ##
-  # Start a new game that runs until game is over.
-  def start
-
+  # Play a turn for the given player. If the player wins after the turn then
+  # return the player's marker. Otherwise, return nil to indicate the move
+  # did not trigger a win.
+  def play_turn(player)
+    play_index = player.make_move
+    @board.mark(play_index, player.marker)
+    puts @board.get_board
+    return get_winner
   end
 
   ##
   # Check the board to see if the game is over by calling all #check_...
   # methods of Board.
-  def game_over?
+  def get_winner
     return @board.check_rows || @board.check_columns || @board.check_diagonals
   end
 

@@ -5,12 +5,12 @@ require_relative '../game.rb'
 RSpec.describe Game do
 
   # Suppress print and puts messages
-  before :all do
-    @stdout = $stdout
-    @stderr = $stderr
-    $stdout = File.open(File::NULL, 'w')
-    $stderr = File.open(File::NULL, 'w')
-  end
+  # before :all do
+  #   @stdout = $stdout
+  #   @stderr = $stderr
+  #   $stdout = File.open(File::NULL, 'w')
+  #   $stderr = File.open(File::NULL, 'w')
+  # end
 
   subject(:game) { described_class.new }
   let(:p1) { instance_double(Player) }
@@ -53,57 +53,114 @@ RSpec.describe Game do
     end
   end
 
-  # ------------------------------------------------------------------------
-  # TO-DO: change the method to return 'X', 'O', or nil to indicate game winner
-  # or that the game is not over yet.
-  # ------------------------------------------------------------------------
-  
   # Script method that calls:
   #   Board#check_rows
   #   Board#check_columns
   #   Board#check_diagonals
-  describe '#game_over?' do
-    let(:board) { instance_double(Board) }
+  describe '#get_winner' do
+    context "when a winner exists in a row" do
+      let(:winning_row_board) {
+        instance_double(
+          Board,
+          check_rows: 'X',
+          check_columns: nil,
+          check_diagonals: nil
+        )
+      }
 
-    before do
-      allow(board).to receive(:check_rows)
-      allow(board).to receive(:check_columns)
-      allow(board).to receive(:check_diagonals)
-      game.instance_variable_set(:@board, board)
+      it "returns the winner marker" do
+        game.instance_variable_set(:@board, winning_row_board)
+        expect(game.get_winner).to eq('X')
+      end
+
+      context "when a winner exists in a column" do
+        let(:winning_row_col_board) {
+          instance_double(
+            Board,
+            check_rows: 'X',
+            check_columns: 'O',
+            check_diagonals: nil
+          )
+        }
+
+        it "returns the row winner marker" do
+          game.instance_variable_set(:@board, winning_row_col_board)
+          expect(game.get_winner).to eq('X')  
+        end
+      end
     end
 
-    it "sends all #check_... messages to the board" do
-      expect(board).to receive(:check_rows)
-      expect(board).to receive(:check_columns)
-      expect(board).to receive(:check_diagonals)
-      game.game_over?
+    context "when no winner exists" do
+      let(:no_winner_board) {
+        instance_double(
+          Board,
+          check_rows: nil,
+          check_columns: nil,
+          check_diagonals: nil
+        )
+      }
+
+      it "returns nil" do
+        game.instance_variable_set(:@board, no_winner_board)
+        expect(game.get_winner).to eq(nil)
+      end
     end
   end
 
   # Script method
-  # Run test to simulate one turn followed by game over.
-  # describe '#start' do
-  #   let(:board) { instance_double(Board) }
-  #   let(:mark_index) { 0 }
+  describe '#play_turn' do
+    let(:p1) { instance_double(Player, marker: 'O') }
+    let(:board) { instance_double(Board) }
 
-  #   before do
-  #     allow(p1).to receive(:make_move).and_return(mark_index)
-  #     allow(board).to receive(:mark).with(mark_index)
-  #     allow(board).to receive(:get_board)
-  #   end
+    before do
+      allow(p1).to receive(:make_move).and_return(0)
+      allow(board).to receive(:mark).with(0, 'O').and_return(true)
+      allow(board).to receive(:get_board)
+      allow(game).to receive(:get_winner).and_return('O')
+      game.instance_variable_set(:@board, board)
+    end
 
-  #   it "runs a new game until game is over" do
+    it "runs a new game until game is over" do
+      expect(p1).to receive(:make_move)
+      expect(board).to receive(:mark)
+      expect(board).to receive(:get_board)
+      expect(game).to receive(:get_winner)
+      game.play_turn(p1)
+    end
+  end
 
-  #   end
-  # end
+  # Script method
+  describe '#start' do
+    context "when the next turn ends the game" do
+      before do
+        allow(game).to receive(:play_turn).and_return('X')
+      end
+
+      it "plays one turn" do
+        expect(game).to receive(:play_turn).once
+        game.start
+      end
+    end
+
+    context "when the next two turns end the game" do
+      before do
+        allow(game).to receive(:play_turn).and_return(nil, 'X')
+      end
+
+      it "plays two turns" do
+        expect(game).to receive(:play_turn).twice
+        game.start
+      end
+    end
+  end
 
 
   # Reset outputs correctly
-  after :all do
-    $stdout = @stdout
-    $stderr = @stderr
-    @stdout = nil
-    @stderr = nil
-  end
+  # after :all do
+  #   $stdout = @stdout
+  #   $stderr = @stderr
+  #   @stdout = nil
+  #   @stderr = nil
+  # end
 
 end
